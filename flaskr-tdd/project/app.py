@@ -111,6 +111,6 @@ def delete_entry(post_id):
     return jsonify(result)
 
 
-# python -m flask --app project/app.py run -p 5001
+# python -m waitress --host=0.0.0.0 --port=5001 project.app:app
 if __name__ == "__main__":
     waitress.serve(app, host='0.0.0.0', port=5001)
