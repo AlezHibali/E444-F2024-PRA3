@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo pkill -f "flask"
+sudo pkill -f "waitress"
