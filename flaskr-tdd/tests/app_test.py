@@ -1,7 +1,7 @@
-import os
-import pytest
 import json
 from pathlib import Path
+
+import pytest
 
 from project.app import app, db
 
@@ -13,11 +13,7 @@ def client():
     BASE_DIR = Path(__file__).resolve().parent.parent
     app.config["TESTING"] = True
     app.config["DATABASE"] = BASE_DIR.joinpath(TEST_DB)
-
-    url = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR.joinpath(TEST_DB)}')
-    if url.startswith("postgres://"):
-        url = url.replace("postgres://", "postgresql://", 1)
-    app.config["SQLALCHEMY_DATABASE_URI"] = url
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{BASE_DIR.joinpath(TEST_DB)}"
 
     with app.app_context():
         db.create_all()  # setup
@@ -45,8 +41,9 @@ def test_index(client):
 
 
 def test_database(client):
-    # init_db() # init db within test to ensure that the test can be ran independently
-    assert Path("test.db").is_file()
+    """initial test. ensure that the database exists"""
+    tester = Path("test.db").is_file()
+    assert tester
 
 
 def test_empty_db(client):
@@ -78,6 +75,7 @@ def test_messages(client):
     assert b"No entries here so far" not in rv.data
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
+
 
 def test_delete_message(client):
     """Ensure the messages are being deleted"""
