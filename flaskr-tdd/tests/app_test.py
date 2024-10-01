@@ -13,7 +13,11 @@ def client():
     BASE_DIR = Path(__file__).resolve().parent.parent
     app.config["TESTING"] = True
     app.config["DATABASE"] = BASE_DIR.joinpath(TEST_DB)
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{BASE_DIR.joinpath(TEST_DB)}"
+
+    url = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR.joinpath(TEST_DB)}')
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = url
 
     with app.app_context():
         db.create_all()  # setup
@@ -40,7 +44,7 @@ def test_index(client):
     assert response.status_code == 200
 
 
-def test_database():
+def test_database(client):
     # init_db() # init db within test to ensure that the test can be ran independently
     assert Path("test.db").is_file()
 
