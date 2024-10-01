@@ -86,6 +86,16 @@ def delete_entry(post_id):
     return jsonify(result)
 
 
+# search for both title and content
+@app.route('/search/', methods=['GET'])
+def search():
+    query = request.args.get("query")
+    entries = db.session.query(models.Post)
+    if query:
+        return render_template('search.html', entries=entries, query=query)
+    return render_template('search.html')
+
+
 # python -m waitress --host=0.0.0.0 --port=5001 project.app:app
 if __name__ == "__main__":
     waitress.serve(app, host='0.0.0.0', port=5001)
