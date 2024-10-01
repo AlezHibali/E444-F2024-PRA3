@@ -1,2 +1,2 @@
 #!/bin/bash
-pkill -f "flask run"
+sudo pkill -f "flask"
