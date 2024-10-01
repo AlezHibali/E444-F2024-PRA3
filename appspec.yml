@@ -5,6 +5,9 @@ files:
     destination: /home/ec2-user/E444-F2024-PRA3/
 hooks:
   BeforeInstall:
+    - location: scripts/set_permissions.sh
+      timeout: 30
+      runas: root
     - location: scripts/before_install.sh
       timeout: 30
       runas: root
