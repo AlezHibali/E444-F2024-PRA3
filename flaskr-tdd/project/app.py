@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort, jsonify
+import waitress
 
 # configuration
 DATABASE = "flaskr.db"
@@ -112,4 +113,4 @@ def delete_entry(post_id):
 
 # python -m flask --app project/app.py run -p 5001
 if __name__ == "__main__":
-    app.run()
+    waitress.serve(app, host='0.0.0.0', port=5001)
